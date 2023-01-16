@@ -6,7 +6,7 @@ This project is an script installer related to [GoBase project](https://github.c
 
 The easiest way is first of all download the script and then run it in your terminal.
 
-You can follow the commands described below:
+You can follow the two commands described below:
 
 ```shell
 $  wget https://raw.githubusercontent.com/lucasnv/gobase-installer/master/install-go-base-project.sh`
