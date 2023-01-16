@@ -87,7 +87,7 @@ bar_size=40
 bar_char_done="#"
 bar_char_todo="-"
 bar_percentage_scale=2
-tasks_in_total=9
+tasks_in_total=12
 
 
 # FUNCTIONS
@@ -228,25 +228,30 @@ show_progress 7 $tasks_in_total "Creating environment file"
 cp env.example .env
 
 
-show_progress 8 $tasks_in_total "Configuring go modules        "
+show_progress 8 $tasks_in_total "Configuring go modules      "
 docker run -v `pwd`:/app-src -w /app-src golang:1.19.5-alpine3.17 go mod init ${Module_Path} &> /dev/null
 docker run -v `pwd`:/app-src -w /app-src golang:1.19.5-alpine3.17 go mod tidy &> /dev/null
 
-# 
-#TODO
-# MOSTAR UNA PANtalla mas copada de instalacion como con un marco 
+# Building App
+show_progress 11 $tasks_in_total "Building app        "
+cd ../${Destination_Folder} && make img-build &> /dev/null
+
+show_progress $tasks_in_total $tasks_in_total "Completed successfully           "
+
+printf "\n"
+
+printf " ${BBlue}Follow the next steps: ${Color_Off}\n"
+printf " > cd ${Destination_Folder} && make start\n"
+printf " > curl 0.0.0.0:8080/v1/health-check \n"
+
+printf "\n ${On_Green}${BBlack}If the api responds with {'status':'healthy API status.'}, the new project has been created successfully.${Color_Off}\n"
+
+
+
+# TODO
 #.install [MODULE] [CONTAINER] [FOLDER] [GOLANG VERSION]
 # Evitar el paraametro container.
 # mostrar una ayuda sobre que significa cada comando
 # refactroizar script para no depender de la versio golang 1.19 (podria pasarle al script de instalacion la version de go para )
 # ./install-go-base-project.sh "github.com/omi-tech/api" "toolboard-api" testgobase
 
-show_progress $tasks_in_total $tasks_in_total "Completed                 "
-
-printf "\n"
-
-printf " ${BBlue}Follow the next steps: ${Color_Off}\n"
-printf " > cd ${Destination_Folder} && make init\n"
-printf " > curl 0.0.0.0:8080/v1/health-check \n"
-
-printf "\n ${On_Green}${BBlack}If the api responds with {'status':'healthy API status.'}, the new project has been created successfully.${Color_Off}\n"
