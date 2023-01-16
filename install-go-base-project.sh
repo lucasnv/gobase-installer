@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# PARAMETERS
+#-------------
+
 # Colors
 # Reset
 Color_Off='\033[0m'       # Text Reset
@@ -74,14 +77,21 @@ On_IPurple='\033[0;105m'  # Purple
 On_ICyan='\033[0;106m'    # Cyan
 On_IWhite='\033[0;107m'   # White
 
+#inputs 
+Module_Path=$1
+Docker_Container_Name=$2
+Project_Folder_Name=$3
+
 # Progress bar parameters
 bar_size=40
 bar_char_done="#"
 bar_char_todo="-"
 bar_percentage_scale=2
-tasks_in_total=8
+tasks_in_total=9
 
-# Functions
+
+# FUNCTIONS
+#-----------
 show_progress ()
 {
     current="$1"
@@ -121,55 +131,72 @@ show_error_message()
     printf "\n"
 }
 
-
+# SCRIPT INIT
+#-------------
 printf "\n"
-show_progress 1 $tasks_in_total "Checking parameters"
-show_progress 2 $tasks_in_total "Start installation"
 
 # Check parameters
-if [ -z "$1" ]
+if [ -z "${Module_Path}" ]
   then
     show_error_message "module path" "first"
     show_example_message
     exit 0
 fi
 
-if [ -z "$2" ]
+if [ -z "${Docker_Container_Name}" ]
   then
     show_error_message "docker container name" "second"
     show_example_message
     exit 0
 fi
 
-if [ -z "$3" ]
+if [ -z "${Project_Folder_Name}" ]
   then
     show_error_message "the name of your folder locally" "third"
     show_example_message
     exit 0
 fi
 
+# Ask confirmation
+printf "${BYellow} You are going to start a new project with the following information: ${Color_Off}\n"
+printf "${BWhite} > Go module path:${BBlue} ${Module_Path} ${Color_Off}\n"
+printf "${BWhite} > Docker container name:${BBlue} ${Docker_Container_Name} ${Color_Off}\n"
+printf "${BWhite} > Folder name:${BBlue} ${Project_Folder_Name} ${Color_Off}\n\n"
+read -p "Are you sure to continue? (yes=y , No=n): " -n 1 -r
+echo ""
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+    printf "${BGreen} Installation finished:${Color_Off}\n"
+    exit 1
+fi
+
+printf "\n"
+
+show_progress 2 $tasks_in_total "Start installation"
 
 # Clone gobase project
 show_progress 3 $tasks_in_total "Downloading project"
-git clone git@github.com:lucasnv/gobase.git $3 &> /dev/null
+git clone git@github.com:lucasnv/gobase.git ${Project_Folder_Name} &> /dev/null
 
 
-show_progress 4 $tasks_in_total "Configuring project"
 # Move into the project folder
+show_progress 4 $tasks_in_total "Enter into the project"
 cd $3
 
 
 # Remove github repository source
+show_progress 5 $tasks_in_total "Delete git configuration"
 rm -dfr .git
 
 # set the module URL
+show_progress 6 $tasks_in_total "Configuring project"
 grep -rl --exclude-dir=.git \
          --exclude-dir=bin \
          --exclude-dir=.github \
          --exclude-dir=config \
          --exclude-dir=db \
          --exclude-dir=scripts \
-         '<MODULE_URL_REPLACE>' . | xargs sed -i "s+<MODULE_URL_REPLACE>+$1+g"
+         '<MODULE_URL_REPLACE>' . | xargs sed -i "s+<MODULE_URL_REPLACE>+${Module_Path}+g"
 
 # set the container name
 grep -rl --exclude-dir=.git \
@@ -178,36 +205,32 @@ grep -rl --exclude-dir=.git \
          --exclude-dir=config \
          --exclude-dir=db \
          --exclude-dir=scripts \
-         '<CONTAINER_NAME_REPLACE>' . | xargs sed -i "s+<CONTAINER_NAME_REPLACE>+$2+g"
+         '<CONTAINER_NAME_REPLACE>' . | xargs sed -i "s+<CONTAINER_NAME_REPLACE>+${Docker_Container_Name}+g"
 
 # Installing go mod
-show_progress 5 $tasks_in_total "Creating environment file"
+show_progress 7 $tasks_in_total "Creating environment file"
 cp env.example .env
 
 
-show_progress 6 $tasks_in_total "Configuring go modules        "
-docker run -v `pwd`:/app-src -w /app-src golang:1.19.5-alpine3.17 go mod init $1 &> /dev/null
+show_progress 8 $tasks_in_total "Configuring go modules        "
+docker run -v `pwd`:/app-src -w /app-src golang:1.19.5-alpine3.17 go mod init ${Module_Path} &> /dev/null
 docker run -v `pwd`:/app-src -w /app-src golang:1.19.5-alpine3.17 go mod tidy &> /dev/null
 
 # 
 #TODO
 # MOSTAR UNA PANtalla mas copada de instalacion como con un marco 
 #.install [MODULE] [CONTAINER] [FOLDER] [GOLANG VERSION]
-# puedo mostrar un mensaje de aceptacion sobre lo que se va a realizar antes de ejecutar.
-
-# quizas puedo evitar el parametro container.
-# mostrar un mensaje final sobre que tengo que hacer una vez finalizada la instalacion
+# Evitar el paraametro container.
 # mostrar una ayuda sobre que significa cada comando
-# refactroizar script para no depender de la versio golang 1.19
-# refactorizar script para eliminar las variables $1 
+# refactroizar script para no depender de la versio golang 1.19 (podria pasarle al script de instalacion la version de go para )
 # ./install-go-base-project.sh "github.com/omi-tech/api" "toolboard-api" testgobase
-# podria pasarle al script de instalacion la version de go para 
-
-#- la idea es hacer un archivo de instalacion separado del projecto
-# docker run -v `pwd`:"/src" -ti golang:1.19.5-alpine3.17 go mod init github.com/omi-tech/api
-
-
 
 show_progress $tasks_in_total $tasks_in_total "Completed                 "
 
 printf "\n"
+
+printf " ${BBlue}Follow the next steps: ${Color_Off}\n"
+printf " > cd ${Project_Folder_Name} && make init\n"
+printf " > curl 0.0.0.0:8080/v1/health-check \n"
+
+printf "\n ${On_Green}${BBlack}If the api responds with {'status':'healthy API status.'}, the new project has been created successfully.${Color_Off}\n"
