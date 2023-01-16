@@ -80,7 +80,7 @@ On_IWhite='\033[0;107m'   # White
 #inputs 
 Module_Path=$1
 Docker_Container_Name=$2
-Project_Folder_Name=$3
+Destination_Folder=$3
 
 # Progress bar parameters
 bar_size=40
@@ -131,9 +131,25 @@ show_error_message()
     printf "\n"
 }
 
+show_header()
+{
+  clear
+  printf "\n"
+  printf " ${BYellow}-------------------------------------------- ${Color_Off} \n"
+  printf " ${BYellow}-                                          - ${Color_Off} \n"
+  printf " ${BYellow}-            GO BASE INSTALLER             - ${Color_Off} \n"
+  printf " ${BYellow}-                ${BBlue} V0.0.1                  ${BYellow} - ${Color_Off} \n"
+  printf " ${BYellow}-          ${BGreen}Author: Lucas Vazquez         ${BYellow}  - ${Color_Off} \n"
+  printf " ${BYellow}-                                          - ${Color_Off} \n"
+  printf " ${BYellow}-------------------------------------------- ${Color_Off} \n"
+  printf "\n"
+}
+
 # SCRIPT INIT
 #-------------
 printf "\n"
+
+show_header
 
 # Check parameters
 if [ -z "${Module_Path}" ]
@@ -150,7 +166,7 @@ if [ -z "${Docker_Container_Name}" ]
     exit 0
 fi
 
-if [ -z "${Project_Folder_Name}" ]
+if [ -z "${Destination_Folder}" ]
   then
     show_error_message "the name of your folder locally" "third"
     show_example_message
@@ -161,7 +177,7 @@ fi
 printf "${BYellow} You are going to start a new project with the following information: ${Color_Off}\n"
 printf "${BWhite} > Go module path:${BBlue} ${Module_Path} ${Color_Off}\n"
 printf "${BWhite} > Docker container name:${BBlue} ${Docker_Container_Name} ${Color_Off}\n"
-printf "${BWhite} > Folder name:${BBlue} ${Project_Folder_Name} ${Color_Off}\n\n"
+printf "${BWhite} > Destination folder:${BBlue} ${Destination_Folder} ${Color_Off}\n\n"
 read -p "Are you sure to continue? (yes=y , No=n): " -n 1 -r
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]
@@ -176,7 +192,7 @@ show_progress 2 $tasks_in_total "Start installation"
 
 # Clone gobase project
 show_progress 3 $tasks_in_total "Downloading project"
-git clone git@github.com:lucasnv/gobase.git ${Project_Folder_Name} &> /dev/null
+git clone git@github.com:lucasnv/gobase.git ${Destination_Folder} &> /dev/null
 
 
 # Move into the project folder
@@ -230,7 +246,7 @@ show_progress $tasks_in_total $tasks_in_total "Completed                 "
 printf "\n"
 
 printf " ${BBlue}Follow the next steps: ${Color_Off}\n"
-printf " > cd ${Project_Folder_Name} && make init\n"
+printf " > cd ${Destination_Folder} && make init\n"
 printf " > curl 0.0.0.0:8080/v1/health-check \n"
 
 printf "\n ${On_Green}${BBlack}If the api responds with {'status':'healthy API status.'}, the new project has been created successfully.${Color_Off}\n"
