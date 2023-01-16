@@ -12,7 +12,7 @@ You can follow the commands described below:
 
 `./install-go-base-project.sh [MODULE PATH] [DOCKER CONTAINER NAME] [FOLDER PROJECT NAME]`
 
-- **MODULE PATH:** It's the name of your GoLang module, in the most of the cases is something like** github.com/orgnanization/project-name**
+- **MODULE PATH:** It's the name of your GoLang module, in the most of the cases is something like **github.com/orgnanization/project-name**
 
 - **DOCKER CONTAINER NAME:** It's the name of your docker container, take into account the name must be unique in your environment.
 
