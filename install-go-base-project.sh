@@ -250,8 +250,8 @@ printf "\n ${On_Green}${BBlack}If the api responds with {'status':'healthy API s
 
 # TODO
 #.install [MODULE] [CONTAINER] [FOLDER] [GOLANG VERSION]
-# Evitar el paraametro container.
-# mostrar una ayuda sobre que significa cada comando
+# Evitar el parametro container.
 # refactroizar script para no depender de la versio golang 1.19 (podria pasarle al script de instalacion la version de go para )
 # ./install-go-base-project.sh "github.com/omi-tech/api" "toolboard-api" testgobase
+# Detallar limitaciones como que solo se probo en linux
 

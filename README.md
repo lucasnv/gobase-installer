@@ -20,3 +20,4 @@ $  ./install-go-base-project.sh [MODULE PATH] [DOCKER CONTAINER NAME] [FOLDER PR
 - **DOCKER CONTAINER NAME:** It is the name of your docker container, take into account the name must be unique in your environment.
 
 - **FOLDER PROJECT NAME:** It is the location of your project in your local environment.
+
