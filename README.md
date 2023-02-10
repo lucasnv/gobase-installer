@@ -21,3 +21,7 @@ $  ./install-go-base-project.sh [MODULE PATH] [DOCKER CONTAINER NAME] [FOLDER PR
 
 - **FOLDER PROJECT NAME:** It is the location of your project in your local environment.
 
+TODO:
+
+- Change the owner files of go.mod and go.sum
+- I have the problem when I work locally the editors can find the information libs that I need to import, because dont use the golan version installed in the container.

@@ -234,7 +234,7 @@ docker run -v `pwd`:/app-src -w /app-src golang:1.19.5-alpine3.17 go mod tidy &>
 
 # Building App
 show_progress 11 $tasks_in_total "Building app        "
-cd ../${Destination_Folder} && make img-build &> /dev/null
+cd ${Destination_Folder} && make img-build &> /dev/null
 
 show_progress $tasks_in_total $tasks_in_total "Completed successfully           "
 
