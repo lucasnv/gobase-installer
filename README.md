@@ -1,6 +1,6 @@
 ## About this project
 
-This project is an script installer related to [GoBase project](https://github.com/lucasnv/gobase) Which give you the opportunity to start a GoLang app from scratch in seconds.
+This project is a script installer related to [GoBase project](https://github.com/lucasnv/gobase) Which give you the opportunity to start a GoLang app from scratch in seconds.
 
 ## How to use?
 
@@ -9,8 +9,11 @@ The easiest way is first of all download the script and then run it in your term
 You can follow the two commands described below:
 
 ```shell
-$  wget https://raw.githubusercontent.com/lucasnv/gobase-installer/master/install-go-base-project.sh`
-$  ./install-go-base-project.sh [MODULE PATH] [DOCKER CONTAINER NAME] [FOLDER PROJECT NAME]`
+$  wget https://raw.githubusercontent.com/lucasnv/gobase-installer/master/install-go-base-project.sh
+```
+
+```shell
+$  ./install-go-base-project.sh [MODULE PATH] [DOCKER CONTAINER NAME] [FOLDER PROJECT NAME]
 ```
 
 ### What does it means each parameter?
