@@ -197,7 +197,7 @@ git clone git@github.com:lucasnv/gobase.git ${Destination_Folder} &> /dev/null
 
 # Move into the project folder
 show_progress 4 $tasks_in_total "Enter into the project"
-cd $3
+cd ${Destination_Folder}
 
 
 # Remove github repository source
@@ -234,7 +234,7 @@ docker run -v `pwd`:/app-src -w /app-src golang:1.19.5-alpine3.17 go mod tidy &>
 
 # Building App
 show_progress 11 $tasks_in_total "Building app        "
-cd ${Destination_Folder} && make img-build &> /dev/null
+make img-build &> /dev/null
 
 show_progress $tasks_in_total $tasks_in_total "Completed successfully           "
 
